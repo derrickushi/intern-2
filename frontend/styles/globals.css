@@ -1,0 +1,205 @@
+/* ./styles/globals.css */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Crimson+Text:wght@400;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Vintage Color Palette */
+:root {
+  --vintage-parchment: #F5F1E8;
+  --vintage-paper: #FBF8F1;
+  --vintage-ink: #3E2723;
+  --vintage-brown: #704214;
+  --vintage-gold: #D4AF37;
+  --vintage-bronze: #8B7355;
+  --vintage-border: #C9B896;
+  --vintage-dark: #5a3410;
+}
+
+@layer base {
+  body {
+    background: linear-gradient(to bottom, var(--vintage-parchment) 0%, #e8dcc8 100%);
+    background-attachment: fixed;
+    font-family: 'Crimson Text', 'Georgia', serif;
+    color: var(--vintage-ink);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', 'Georgia', serif;
+    color: var(--vintage-ink);
+    letter-spacing: 1px;
+  }
+
+  p {
+    font-family: 'Crimson Text', serif;
+    color: var(--vintage-ink);
+  }
+}
+
+@layer components {
+  /* Vintage Card */
+  .vintage-card {
+    background: var(--vintage-paper);
+    border: 2px solid var(--vintage-bronze);
+    box-shadow: 
+      0 0 0 1px var(--vintage-gold),
+      0 4px 6px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+  }
+
+  /* Vintage Button */
+  .vintage-button {
+    background: linear-gradient(to bottom, var(--vintage-bronze) 0%, var(--vintage-brown) 100%);
+    border: 2px solid var(--vintage-gold);
+    color: var(--vintage-paper);
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    box-shadow: 
+      0 4px 6px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .vintage-button:hover:not(:disabled) {
+    background: linear-gradient(to bottom, var(--vintage-brown) 0%, var(--vintage-dark) 100%);
+    box-shadow: 
+      0 6px 12px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      0 0 20px rgba(212, 175, 55, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .vintage-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* Vintage Input */
+  .vintage-input {
+    background: var(--vintage-paper);
+    border: 2px solid var(--vintage-border);
+    font-family: 'Crimson Text', serif;
+    color: var(--vintage-ink);
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+
+  .vintage-input:focus {
+    outline: none;
+    border-color: var(--vintage-gold);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+    background: #FFFEF9;
+  }
+
+  /* Vintage Link */
+  .vintage-link {
+    color: var(--vintage-bronze);
+    text-decoration: none;
+    border-bottom: 1px solid var(--vintage-gold);
+    transition: all 0.3s ease;
+    font-family: 'Crimson Text', serif;
+  }
+
+  .vintage-link:hover {
+    color: var(--vintage-gold);
+    border-bottom-color: var(--vintage-bronze);
+  }
+
+  /* Ornamental Divider */
+  .ornament-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: var(--vintage-gold);
+    font-size: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .ornament-divider::before,
+  .ornament-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 2px solid var(--vintage-border);
+  }
+
+  .ornament-divider::before {
+    margin-right: 1rem;
+  }
+
+  .ornament-divider::after {
+    margin-left: 1rem;
+  }
+
+  /* Aged Paper Texture */
+  .aged-paper {
+    background: 
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6)),
+      url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" /></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.05"/></svg>');
+    background-color: var(--vintage-paper);
+  }
+
+  /* Vintage Badge */
+  .vintage-badge {
+    background: var(--vintage-gold);
+    color: var(--vintage-ink);
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    padding: 0.25rem 0.75rem;
+    border-radius: 2px;
+    border: 1px solid var(--vintage-bronze);
+  }
+}
+
+/* Dark mode override - keep vintage theme */
+.dark body {
+  background: linear-gradient(to bottom, #2d2520 0%, #1a1410 100%);
+  color: #e8dcc8;
+}
+
+.dark .vintage-card {
+  background: #3a2f28;
+  border-color: #8B7355;
+}
+
+.dark .vintage-input {
+  background: #3a2f28;
+  color: #e8dcc8;
+}
+
+.dark p, .dark h1, .dark h2, .dark h3, .dark h4, .dark h5 {
+  color: #e8dcc8;
+}
+
+.dark .bg-white {
+  background-color: #3a2f28;
+}
+
+.dark .text-gray-600 {
+  color: #C9B896;
+}
+
+.dark .text-gray-700 {
+  color: #a89578;
+}
+
+/* Toast notifications - vintage style */
+.Toastify__progress-bar--default {
+  background: var(--vintage-gold) !important;
+}
+
+.Toastify__toast {
+  background: var(--vintage-paper) !important;
+  color: var(--vintage-ink) !important;
+  border: 1px solid var(--vintage-border) !important;
+  font-family: 'Crimson Text', serif !important;
+}
