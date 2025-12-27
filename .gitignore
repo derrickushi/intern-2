@@ -2,3 +2,7 @@
 .env.local
 .next
 node_modules
+
+# Vercel
+.vercel
+.vercel.json
