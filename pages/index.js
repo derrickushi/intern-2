@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { Center, Footer, Tag, Showcase, DisplaySmall, DisplayMedium } from '../frontend/components'
 import { titleIfy, slugify } from '../backend/utils/helpers'
-import { fetchInventory } from '../backend/utils/inventoryProvider'
+import { getInventory } from '../backend/utils/inventoryService'
 import CartLink from '../frontend/components/CartLink'
 
 const Home = ({ inventoryData = [], categories: categoryData = [] }) => {
@@ -115,7 +115,7 @@ const Home = ({ inventoryData = [], categories: categoryData = [] }) => {
 }
 
 export async function getStaticProps() {
-  const inventory = await fetchInventory()
+  const inventory = await getInventory()
 
   const inventoryCategorized = inventory.reduce((acc, next) => {
     const category = next.category

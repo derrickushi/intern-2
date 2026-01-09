@@ -24,14 +24,58 @@ class ViewInventory extends React.Component {
     this.setState({ editingIndex, currentItem: item })
   }
   saveItem = async index => {
-    const inventory = [...this.state.inventory]
-    inventory[index] = this.state.currentItem
-    // update item in database
-    this.setState({ editingIndex: null, inventory })
+    try {
+      const inventory = [...this.state.inventory]
+      const updatedItem = this.state.currentItem
+
+      // Update item in database
+      const response = await fetch(`/api/products/${updatedItem._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          currentInventory: parseInt(updatedItem.currentInventory),
+          price: parseFloat(updatedItem.price),
+          title: updatedItem.title || updatedItem.name,
+        }),
+      })
+
+      if (response.ok) {
+        inventory[index] = updatedItem
+        this.setState({ editingIndex: null, inventory })
+        alert('Item updated successfully!')
+      } else {
+        alert('Failed to update item')
+      }
+    } catch (error) {
+      console.error('Error updating item:', error)
+      alert('Error updating item')
+    }
   }
-  deleteItem = async index => {
-    const inventory = [...this.state.inventory.slice(0, index), ...this.state.inventory.slice(index + 1)]
-    this.setState({ inventory })
+  deleteItem = async (item, index) => {
+    if (!confirm(`Are you sure you want to delete "${item.title || item.name}"?`)) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/products/${item._id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        // Remove from local state
+        const inventory = [...this.state.inventory.slice(0, index), ...this.state.inventory.slice(index + 1)];
+        this.setState({ inventory });
+        alert('Item deleted successfully!');
+      } else {
+        const data = await response.json();
+        alert('Error deleting item: ' + (data.message || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error('Error deleting item:', error);
+      alert('Error deleting item: ' + error.message);
+    }
   }
   onChange = event => {
     const currentItem = {
@@ -113,7 +157,7 @@ class ViewInventory extends React.Component {
                     </p>
                   </div>
                   <div className="flex items-center m-0 ml-10 text-gray-900 text-s cursor-pointer mt-4 sm:mt-0">
-                    <FaTimes onClick={() => this.deleteItem(index)} />
+                    <FaTimes onClick={() => this.deleteItem(item, index)} />
                     <p role="button" onClick={() => this.editItem(item, index)} className="text-sm ml-10 m-0">Edit</p>
                   </div>
                 </div>

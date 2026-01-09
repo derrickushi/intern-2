@@ -16,7 +16,7 @@ type Product {
 async function fetchInventory(searchText = '') {
   try {
     const IS_SERVER = typeof window === 'undefined';
-    const baseURL = IS_SERVER ? 'http://localhost:3001' : '';
+    const baseURL = IS_SERVER ? (process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3001') : '';
     const queryParams = new URLSearchParams();
     if (searchText) {
       queryParams.append('q', searchText);

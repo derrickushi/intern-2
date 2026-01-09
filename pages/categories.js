@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { titleIfy, slugify } from '../backend/utils/helpers'
 import { DisplayMedium } from '../frontend/components'
 import CartLink from '../frontend/components/CartLink'
-import { fetchInventory } from '../backend/utils/inventoryProvider'
+import { getInventory } from '../backend/utils/inventoryService'
 
 function Categories({ categories = [] }) {
   return (
@@ -43,7 +43,7 @@ function Categories({ categories = [] }) {
 }
 
 export async function getStaticProps() {
-  const inventory = await fetchInventory()
+  const inventory = await getInventory()
   const inventoryCategories = inventory.reduce((acc, next) => {
     const category = next.category
     const index = acc.findIndex(item => item.name === category)

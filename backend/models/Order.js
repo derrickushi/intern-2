@@ -42,9 +42,32 @@ const OrderSchema = new mongoose.Schema({
     },
     orderStatus: {
         type: String,
-        enum: ['processing', 'shipped', 'delivered', 'cancelled'],
-        default: 'processing',
+        enum: ['Placed', 'Processing', 'Shipped', 'Out for Delivery', 'Delivered', 'Cancelled'],
+        default: 'Placed',
     },
+    estimatedDeliveryDate: {
+        type: Date,
+    },
+    shippedDate: {
+        type: Date,
+    },
+    deliveredDate: {
+        type: Date,
+    },
+    trackingNumber: {
+        type: String,
+    },
+    statusHistory: [{
+        status: {
+            type: String,
+            enum: ['Placed', 'Processing', 'Shipped', 'Out for Delivery', 'Delivered', 'Cancelled'],
+        },
+        timestamp: {
+            type: Date,
+            default: Date.now,
+        },
+        note: String,
+    }],
     upiTransactionId: {
         type: String,
     },
@@ -54,4 +77,9 @@ const OrderSchema = new mongoose.Schema({
     },
 });
 
-export default mongoose.models.Order || mongoose.model('Order', OrderSchema);
+// Delete the cached model to ensure schema updates are applied
+if (mongoose.models.Order) {
+    delete mongoose.models.Order;
+}
+
+export default mongoose.model('Order', OrderSchema);

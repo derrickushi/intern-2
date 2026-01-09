@@ -40,6 +40,15 @@ export default function Layout({ children, categories }) {
               <div className="flex flex-1 justify-end items-center pl-8">
                 <ThemeToggle />
                 <Search />
+                {isAuthenticated && (
+                  <Link href="/my-orders">
+                    <a aria-label="My Orders" className="ml-4 mr-4">
+                      <p className="text-sm text-gray-700 hover:text-blue-500 cursor-pointer font-medium">
+                        My Orders
+                      </p>
+                    </a>
+                  </Link>
+                )}
                 {isAuthenticated ? (
                   <div className="flex items-center space-x-4 ml-4">
                     <Link href="/profile">

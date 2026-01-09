@@ -6,7 +6,16 @@ import { verifyToken } from '../utils/auth';
  */
 export function authMiddleware(handler) {
     return async (req, res) => {
-        const token = req.cookies.token;
+        // Check for token in cookies first, then in Authorization header
+        let token = req.cookies.token;
+
+        if (!token && req.headers.authorization) {
+            // Extract token from "Bearer <token>" format
+            const authHeader = req.headers.authorization;
+            if (authHeader.startsWith('Bearer ')) {
+                token = authHeader.substring(7);
+            }
+        }
 
         if (!token) {
             return res.status(401).json({

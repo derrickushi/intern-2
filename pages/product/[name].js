@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Button from '../../frontend/components/Button'
 import Image from '../../frontend/components/Image'
 import QuantityPicker from '../../frontend/components/QuantityPicker'
-import { fetchInventory } from '../../backend/utils/inventoryProvider'
+import { getInventory } from '../../backend/utils/inventoryService'
 import { slugify } from '../../backend/utils/helpers'
 import CartLink from '../../frontend/components/CartLink'
 import { SiteContext, ContextProviderComponent } from '../../frontend/context/mainContext'
@@ -91,7 +91,7 @@ const ItemView = (props) => {
 }
 
 export async function getStaticPaths() {
-  const inventory = await fetchInventory()
+  const inventory = await getInventory()
   const paths = inventory.map(item => {
     return { params: { name: slugify(item.title) } }
   })
@@ -103,7 +103,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   const name = params.name.replace(/-/g, " ")
-  const inventory = await fetchInventory()
+  const inventory = await getInventory()
   const product = inventory.find(item => slugify(item.title) === slugify(name))
 
   return {

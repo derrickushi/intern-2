@@ -19,30 +19,46 @@ function calculateTotal(cart) {
   return total
 }
 
-class ContextProviderComponent extends React.Component {
-  componentDidMount() {
+function ContextProviderComponent({ children }) {
+  const [state, setState] = React.useState(initialState)
+  const [isClient, setIsClient] = React.useState(false)
+
+  // Only run on client side after mount
+  React.useEffect(() => {
+    setIsClient(true)
     if (typeof window !== 'undefined') {
       const storageState = window.localStorage.getItem(STORAGE_KEY)
-      if (!storageState) {
+      if (storageState) {
+        setState(JSON.parse(storageState))
+      } else {
         window.localStorage.setItem(STORAGE_KEY, JSON.stringify(initialState))
       }
     }
+  }, [])
+
+  const updateState = (newState) => {
+    setState(newState)
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(newState))
+    }
   }
 
-  setItemQuantity = (item) => {
-    const storageState = JSON.parse(window.localStorage.getItem(STORAGE_KEY))
-    const { cart } = storageState
+  const setItemQuantity = (item) => {
+    const { cart } = state
     const index = cart.findIndex(cartItem => cartItem.id === item.id)
-    cart[index].quantity = item.quantity
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      cart, numberOfItemsInCart: cart.length, total: calculateTotal(cart)
-    }))
-    this.forceUpdate()
+    if (index >= 0) {
+      cart[index].quantity = item.quantity
+      const newState = {
+        cart,
+        numberOfItemsInCart: cart.length,
+        total: calculateTotal(cart)
+      }
+      updateState(newState)
+    }
   }
 
-  addToCart = item => {
-    const storageState = JSON.parse(window.localStorage.getItem(STORAGE_KEY))
-    const { cart } = storageState
+  const addToCart = (item) => {
+    const { cart } = state
     if (cart.length) {
       const index = cart.findIndex(cartItem => cartItem.id === item.id)
       if (index >= Number(0)) {
@@ -57,52 +73,44 @@ class ContextProviderComponent extends React.Component {
       cart.push(item)
     }
 
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      cart, numberOfItemsInCart: cart.length, total: calculateTotal(cart)
-    }))
+    const newState = {
+      cart,
+      numberOfItemsInCart: cart.length,
+      total: calculateTotal(cart)
+    }
+    updateState(newState)
     toast("Successfully added item to cart!", {
       position: toast.POSITION.TOP_LEFT
     })
-    this.forceUpdate()
   }
 
-  removeFromCart = (item) => {
-    const storageState = JSON.parse(window.localStorage.getItem(STORAGE_KEY))
-    let { cart } = storageState
+  const removeFromCart = (item) => {
+    let { cart } = state
     cart = cart.filter(c => c.id !== item.id)
 
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      cart, numberOfItemsInCart: cart.length, total: calculateTotal(cart)
-    }))
-    this.forceUpdate()
-  }
-
-  clearCart = () => {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(initialState))
-    this.forceUpdate()
-  }
-
-  render() {
-    let state = initialState
-    if (typeof window !== 'undefined') {
-      const storageState = window.localStorage.getItem(STORAGE_KEY)
-      if (storageState) {
-        state = JSON.parse(storageState)
-      }
+    const newState = {
+      cart,
+      numberOfItemsInCart: cart.length,
+      total: calculateTotal(cart)
     }
-
-    return (
-      <SiteContext.Provider value={{
-        ...state,
-         addToCart: this.addToCart,
-         clearCart: this.clearCart,
-         removeFromCart: this.removeFromCart,
-         setItemQuantity: this.setItemQuantity
-      }}>
-       {this.props.children}
-     </SiteContext.Provider>
-    )
+    updateState(newState)
   }
+
+  const clearCart = () => {
+    updateState(initialState)
+  }
+
+  return (
+    <SiteContext.Provider value={{
+      ...state,
+      addToCart,
+      clearCart,
+      removeFromCart,
+      setItemQuantity
+    }}>
+      {children}
+    </SiteContext.Provider>
+  )
 }
 
 export {

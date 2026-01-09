@@ -27,8 +27,16 @@ async function handlePost(req, res) {
     try {
         const { items, totalAmount, shippingAddress, paymentMethod } = req.body;
 
+        console.log('Order creation request:', {
+            user: req.user,
+            itemsCount: items?.length,
+            totalAmount,
+            hasShippingAddress: !!shippingAddress
+        });
+
         // Validation
         if (!items || !items.length || !totalAmount || !shippingAddress) {
+            console.error('Validation failed:', { items: !!items, itemsLength: items?.length, totalAmount, shippingAddress: !!shippingAddress });
             return res.status(400).json({
                 success: false,
                 message: 'Please provide all required fields',
@@ -37,9 +45,11 @@ async function handlePost(req, res) {
 
         // Verify products exist and have sufficient inventory
         for (const item of items) {
+            console.log('Checking product:', item.product, 'quantity:', item.quantity);
             const product = await Product.findById(item.product);
 
             if (!product) {
+                console.error('Product not found:', item.product);
                 return res.status(404).json({
                     success: false,
                     message: `Product ${item.name} not found`,
@@ -47,12 +57,23 @@ async function handlePost(req, res) {
             }
 
             if (product.currentInventory < item.quantity) {
+                console.error('Insufficient inventory:', {
+                    product: product.title,
+                    available: product.currentInventory,
+                    requested: item.quantity
+                });
                 return res.status(400).json({
                     success: false,
                     message: `Insufficient inventory for ${product.title}`,
                 });
             }
         }
+
+        // Calculate estimated delivery date (5 days from now)
+        const estimatedDeliveryDate = new Date();
+        estimatedDeliveryDate.setDate(estimatedDeliveryDate.getDate() + 5);
+
+        console.log('Creating order for user:', req.user.id);
 
         // Create order
         const order = await Order.create({
@@ -62,8 +83,16 @@ async function handlePost(req, res) {
             shippingAddress,
             paymentMethod: paymentMethod || 'UPI',
             paymentStatus: 'pending',
-            orderStatus: 'processing',
+            orderStatus: 'Placed',
+            estimatedDeliveryDate,
+            statusHistory: [{
+                status: 'Placed',
+                timestamp: new Date(),
+                note: 'Order placed successfully'
+            }]
         });
+
+        console.log('Order created:', order._id);
 
         // Update inventory
         for (const item of items) {
@@ -76,6 +105,8 @@ async function handlePost(req, res) {
         // Populate product details
         await order.populate('items.product');
 
+        console.log('Order completed successfully:', order._id);
+
         return res.status(201).json({
             success: true,
             message: 'Order created successfully',
@@ -83,9 +114,10 @@ async function handlePost(req, res) {
         });
     } catch (error) {
         console.error('Create order error:', error);
+        console.error('Error stack:', error.stack);
         return res.status(500).json({
             success: false,
-            message: 'Error creating order',
+            message: 'Error creating order: ' + error.message,
         });
     }
 }

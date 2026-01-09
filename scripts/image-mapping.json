@@ -1,0 +1,37 @@
+{
+  "newspapers": [
+    "wall-street-crash.png",
+    "wwi-armistice.png"
+  ],
+  "coins": [
+    "byzantine-solidus.png",
+    "chinese-cash.png",
+    "morgan-dollar.png",
+    "napoleon-franc.png",
+    "british-sovereign.png",
+    "mercury-dime.png",
+    "samurai-coin.png"
+  ],
+  "currency": [
+    "silver-certificate-1899.png",
+    "confederate-bill.png",
+    "french-assignat.png",
+    "german-mark.png",
+    "british-pound-1914.png",
+    "russian-ruble.png",
+    "japanese-yen.png",
+    "italian-lira.png",
+    "chinese-dollar.png",
+    "austrian-krone.png",
+    "indian-rupee.png",
+    "mexican-peso.png",
+    "dutch-guilder.png",
+    "zimbabwe-dollar.png"
+  ],
+  "other": [
+    "vintage-compass.png",
+    "pocket-watch.png",
+    "magnifying-glass.png",
+    "fountain-pen.png"
+  ]
+}

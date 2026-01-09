@@ -26,6 +26,7 @@ async function handleGet(req, res) {
       success: true,
       products,
     });
+
   } catch (error) {
     console.error('Get products error:', error);
     return res.status(500).json({
@@ -50,8 +51,19 @@ async function handlePost(req, res) {
       currentInventory
     } = req.body;
 
+    console.log('Creating product with data:', {
+      title,
+      description,
+      price,
+      category,
+      currentInventory,
+      hasImages: !!images,
+      hasDetails: !!details
+    });
+
     // Validation
     if (!title || !description || !price || !category || currentInventory === undefined) {
+      console.error('Validation failed:', { title: !!title, description: !!description, price: !!price, category: !!category, currentInventory });
       return res.status(400).json({
         success: false,
         message: 'Please provide all required fields',
@@ -71,6 +83,8 @@ async function handlePost(req, res) {
       currentInventory,
     });
 
+    console.log('Product created successfully:', product._id);
+
     return res.status(201).json({
       success: true,
       message: 'Product created successfully',
@@ -78,9 +92,11 @@ async function handlePost(req, res) {
     });
   } catch (error) {
     console.error('Create product error:', error);
+    console.error('Error message:', error.message);
+    console.error('Error stack:', error.stack);
     return res.status(500).json({
       success: false,
-      message: 'Error creating product',
+      message: 'Error creating product: ' + error.message,
     });
   }
 }

@@ -105,7 +105,12 @@ const Checkout = ({ context }) => {
       };
 
       // Create order
-      const response = await axios.post('/api/orders', orderData);
+      const token = localStorage.getItem('token');
+      const response = await axios.post('/api/orders', orderData, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
 
       if (response.data.success) {
         const orderId = response.data.order._id;

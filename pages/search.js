@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { slugify } from '../backend/utils/helpers'
-import { fetchInventory } from '../backend/utils/inventoryProvider'
+import { getInventory } from '../backend/utils/inventoryService'
 import { DisplaySmall } from '../frontend/components'
 
 export default function Search({ inventory, query }) {
@@ -36,7 +36,7 @@ export default function Search({ inventory, query }) {
 
 export async function getServerSideProps(context) {
     const { q } = context.query
-    const inventory = await fetchInventory(q)
+    const inventory = await getInventory(q)
 
     return {
         props: {

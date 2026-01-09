@@ -1,7 +1,7 @@
 import React from 'react'
 
 const initialState = {
-  name: '', brand: '', price: '', categories: [], image: '', description: '', currentInventory: '', colors: '', sizes: ''
+  name: '', brand: '', price: '', categories: '', imagePath: '', description: '', currentInventory: '', colors: '', sizes: ''
 }
 
 class AddInventory extends React.Component {
@@ -12,43 +12,37 @@ class AddInventory extends React.Component {
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
   }
-  onImageChange = async (e) => {
-    const file = e.target.files[0];
-    this.setState({ image: file })
-    // const storageUrl = await Storage.put('example.png', file, {
-    //     contentType: 'image/png'
-    // })
-    // this.setState({ image: storageUrl  })
-  }
   addItem = async () => {
-    const item = {
-      name, brand, price, categories, image, description, currentInventory,
-      colors: colors ? colors.split(',').map(c => c.trim()) : [],
-      sizes: sizes ? sizes.split(',').map(s => s.trim()) : []
+    const { name, brand, price, categories, imagePath, description, currentInventory, colors, sizes } = this.state;
+
+    if (!name || !price || !description || !currentInventory) {
+      alert('Please fill in all required fields: name, price, description, and stock');
+      return;
     }
-    // add to database
-    // Note: The actual API call seems to be missing in the original file or abstracted.
-    // Based on validation "if (!name ... return", I should check if I need to implement the fetch here.
-    // The original code comment says "// add to database".
-    // I will assume the addItem method needs to be implemented or connected.
-    // However, for this task, I am just updating the component state and preparation.
-    // Wait, the original code basically does nothing in addItem except clearForm.
-    // Detailed analysis of AddInventory.js:
-    // It has `addItem` which checks validity and then calls `this.clearForm()`.
-    // It seems incomplete or relies on a parent component?
-    // But `Inventory.js` renders `<AddInventory />` with no props.
-    // This suggests `AddInventory` is responsible for the API call but it's not implemented?
-    // Or maybe I missed something.
-    // Let me check if there's an API call I missed.
-    // The original file:
-    // addItem = async () => {
-    //   const { name, brand, price, categories, image, description, currentInventory } = this.state
-    //   if (!name || ... ) return
-    //   // add to database
-    //   this.clearForm()
-    // }
-    // It seems the API call is indeed missing. I should probably implement it to make it work.
-    // I'll add the fetch call to /api/inventory.
+
+    if (!categories) {
+      alert('Please select a category');
+      return;
+    }
+
+    // Build details object with only string values
+    const details = {};
+    if (brand) details.brand = brand;
+    if (colors) details.colors = colors;  // Store as comma-separated string
+    if (sizes) details.sizes = sizes;      // Store as comma-separated string
+
+    // Map form fields to API fields
+    const item = {
+      title: name,  // API expects 'title' not 'name'
+      description,
+      price: parseFloat(price),
+      category: categories,  // API expects 'category' (singular)
+      currentInventory: parseInt(currentInventory),
+      images: imagePath ? [imagePath] : ['/products/placeholder.png'],
+      details: details
+    }
+
+    console.log('Sending item:', item);
 
     try {
       const response = await fetch('/api/inventory', {
@@ -58,14 +52,17 @@ class AddInventory extends React.Component {
         },
         body: JSON.stringify(item),
       })
+
       if (response.ok) {
-        console.log('Item added')
+        alert('Item added successfully!')
         this.clearForm()
       } else {
-        console.log('Error adding item')
+        const data = await response.json()
+        alert('Error adding item: ' + (data.message || 'Unknown error'))
       }
     } catch (err) {
-      console.log('Error adding item', err)
+      console.error('Error adding item:', err)
+      alert('Error adding item: ' + err.message)
     }
   }
   render() {
@@ -103,13 +100,19 @@ class AddInventory extends React.Component {
                   value={description} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="description" placeholder="Item Description" name="description" />
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="item image">
-                  Item image
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="imagePath">
+                  Item image path
                 </label>
                 <input
-                  type="file"
-                  onChange={(e) => this.onImageChange(e)}
+                  onChange={this.onChange}
+                  value={this.state.imagePath}
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="imagePath"
+                  type="text"
+                  placeholder="/products/other/oil_lamp.webp"
+                  name="imagePath"
                 />
+                <p className="text-xs text-gray-500 mt-1">Example: /products/other/oil_lamp.webp</p>
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="currentInventory">
