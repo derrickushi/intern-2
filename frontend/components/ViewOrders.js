@@ -22,7 +22,7 @@ const ViewOrders = () => {
             }
         } catch (err) {
             console.error('Error fetching orders:', err);
-            setError('Failed to load orders');
+
         } finally {
             setLoading(false);
         }
