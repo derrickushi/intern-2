@@ -95,6 +95,18 @@ export default function Layout({ children, categories }) {
             </button>
           )}
           {children}
+          {showBackButton && (
+            <button
+              onClick={() => router.back()}
+              className="mt-8 mb-4 text-sm font-medium text-gray-600 hover:text-gray-900 flex items-center transition-colors duration-200"
+              aria-label="Go back"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Back
+            </button>
+          )}
         </main>
       </div>
       <footer className="flex justify-center">
