@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { slugify } from '../../backend/utils/helpers'
 import { navItemLength } from '../../ecommerce.config'
 import { useAuth } from '../context/authContext'
@@ -6,10 +7,14 @@ import { Search, CategoryDropdown, ThemeToggle } from '../components'
 
 export default function Layout({ children, categories }) {
   const { user, logout, isAuthenticated } = useAuth();
+  const router = useRouter();
 
   if (categories.length > navItemLength) {
     categories = categories.slice(0, navItemLength)
   }
+
+  const showBackButton = router.pathname !== '/' && router.pathname !== '/login';
+
   return (
     <div>
       <nav>
@@ -76,7 +81,21 @@ export default function Layout({ children, categories }) {
         </div>
       </nav>
       <div className="mobile:px-10 px-4 pb-10 flex justify-center">
-        <main className="w-fw">{children}</main>
+        <main className="w-fw">
+          {showBackButton && (
+            <button
+              onClick={() => router.back()}
+              className="mb-4 text-sm font-medium text-gray-600 hover:text-gray-900 flex items-center transition-colors duration-200"
+              aria-label="Go back"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Back
+            </button>
+          )}
+          {children}
+        </main>
       </div>
       <footer className="flex justify-center">
         <div className="

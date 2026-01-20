@@ -2,7 +2,6 @@ import { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useAuth } from '../frontend/context/authContext';
-import GoogleSignInButton from '../frontend/components/GoogleSignInButton';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -185,13 +184,8 @@ export default function Login() {
                     </div>
 
                     {/* Google Sign-In */}
-                    <div className="mb-6">
-                        <GoogleSignInButton />
+                    {/* Google Sign-In removed */}
 
-                        <div className="my-6 divider-ornament">
-                            <span className="px-3 text-sm">Or continue with email</span>
-                        </div>
-                    </div>
 
                     {/* Login Form */}
                     <form className="space-y-5" onSubmit={handleSubmit}>
