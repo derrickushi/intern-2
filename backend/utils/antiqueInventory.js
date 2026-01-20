@@ -559,7 +559,7 @@ const antiqueInventory = [
     {
         title: "Vintage Compass",
         description: "Brass pocket compass from the turn of the century. Perfect for collectors and adventurers.",
-        price: 150,
+        price: 85000,
         images: ['/products/other/vintage_compass.webp'],
         category: 'Other',
         year: 1910,
@@ -573,7 +573,7 @@ const antiqueInventory = [
     {
         title: "Antique Pocket Watch",
         description: "Gold-plated pocket watch with Roman numerals, still in working condition.",
-        price: 320,
+        price: 120000,
         images: ['/products/other/pocket_watch.webp'],
         category: 'Other',
         year: 1895,
@@ -587,7 +587,7 @@ const antiqueInventory = [
     {
         title: "Victorian Magnifying Glass",
         description: "Ornate brass magnifying glass with mother-of-pearl handle from the Victorian era.",
-        price: 180,
+        price: 95000,
         images: ['/products/other/magnifying_glass.webp'],
         category: 'Other',
         year: 1880,
@@ -601,7 +601,7 @@ const antiqueInventory = [
     {
         title: "Antique Fountain Pen",
         description: "Elegant fountain pen with 14k gold nib, used by a prominent Victorian author.",
-        price: 275,
+        price: 110000,
         images: ['/products/other/fountain_pen.webp'],
         category: 'Other',
         year: 1905,
@@ -615,7 +615,7 @@ const antiqueInventory = [
     {
         title: "Antique Brass Telescope",
         description: "Victorian era brass telescope with leather grip, perfect for stargazing or maritime display.",
-        price: 420,
+        price: 150000,
         images: ['/products/other/antique_telescope.webp'],
         category: 'Other',
         year: 1885,
@@ -629,7 +629,7 @@ const antiqueInventory = [
     {
         title: "Vintage Typewriter",
         description: "Classic mechanical typewriter from the 1920s with original keys and working mechanism.",
-        price: 550,
+        price: 180000,
         images: ['/products/other/vintage_typewriter.webp'],
         category: 'Other',
         year: 1925,
@@ -643,7 +643,7 @@ const antiqueInventory = [
     {
         title: "Antique Gramophone",
         description: "Early 1900s gramophone with brass horn and hand-crank mechanism, a true piece of musical history.",
-        price: 890,
+        price: 195000,
         images: ['/products/other/gramophone.webp'],
         category: 'Other',
         year: 1908,
