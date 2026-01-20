@@ -269,7 +269,7 @@ export default function Login() {
                 {/* Established badge */}
                 <div className="text-center mt-4">
                     <p className="text-xs" style={{ color: '#8B7355', fontFamily: "'Crimson Text', serif", letterSpacing: '2px' }}>
-                        EST. 1890 • PURVEYORS OF FINE ANTIQUITIES
+                        EST. 1777 • PURVEYORS OF FINE ANTIQUITIES
                     </p>
                 </div>
             </div>
